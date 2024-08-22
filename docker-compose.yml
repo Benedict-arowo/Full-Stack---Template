@@ -1,0 +1,29 @@
+services:
+    backend:
+        build:
+            context: ./backend
+        volumes:
+            - ./backend:/app
+            - /app/node_modules
+        ports:
+            - "5000:5000"
+        command: npm run start:dev
+        environment:
+            - NODE_ENV=development
+        depends_on:
+            - postgres
+
+    postgres:
+        image: postgres:16-alpine
+        restart: always
+        environment:
+            POSTGRES_USER: admin
+            POSTGRES_PASSWORD: root
+            POSTGRES_DB: db
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+
+volumes:
+    pgdata:
